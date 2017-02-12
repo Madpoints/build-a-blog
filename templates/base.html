@@ -1,11 +1,7 @@
 <!DOCTYPE html>
-
 <html>
-
     <head>
-        <title>AsciiArt</title>
-    </head>
-
+        <title>Blog</title>
     <style type="text/css">
         body {
             font-family: sans-serif;
@@ -65,38 +61,19 @@
             font-size: 17px;
         }
     </style>
-
+    </head>
     <body>
         <h1 class="header">
-         AsciiArt
+        Blog
         </h1>
-        <form method="post">
+        <ul>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/newpost">New Post</a></li>
+        </ul>
 
-            <label>
-                <div>title<div>
-                <input type="text" name="title" value="{{ title }}">
-            </label>
+        {% block content%}
+        {% endblock %}
 
-            <label>
-                <div>art</div>
-                <textarea name="art" value>{{ art }}</textarea>
-            </label>
-
-            <div class="error">{{ error }}</div>
-
-            <input type="submit">
-
-        </form>
-        <hr>
-
-        {% for art in arts %}
-
-            <div class="art">
-                <div class="art-title">{{ art.title }}</div>
-                <pre class="art-body">{{art.art}}</pre>
-            </div>
-
-        {% endfor %}
     </body>
 
 </html>

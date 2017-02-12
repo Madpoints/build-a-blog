@@ -38,30 +38,32 @@ class Handler(webapp2.RequestHandler):
 
 class Blog(db.Model):
     title = db.StringProperty(required = True)
-    art = db.TextProperty(required = True)
+    blog = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
 
-class MainPage(Handler):
-    def render_base(self, title="", art="", error=""):
-        arts = db.GqlQuery("SELECT * FROM Art ORDER BY created DESC")
-
-        self.render("base.html", title=title, art=art, error=error, arts=arts)
-
+class MainBlog(Handler):
     def get(self):
-        self.render_base()
+        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5 OFFSET 0")
+
+        self.render("main.html", blogs=blogs)
+
+class NewPost(Handler):
+    def get(self):
+        self.render("new-post.html")
 
     def post(self):
         title = self.request.get("title")
-        art = self.request.get("art")
+        blog = self.request.get("blog")
 
-        if title and art:
-            a = Art(title = title, art = art)
-            a.put()
-            self.redirect("/")
+        if title and blog:
+            b = Blog(title = title, blog = blog)
+            b.put()
+            self.redirect("/blog")
         else:
-            error = "we need both a title and some artwork!"
-            self.render_base(title, art, error)
+            error = "we need both a title and some text!"
+            self.render("new-post.html", title=title, blog=blog, error=error)
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage)
+    ('/blog', MainBlog),
+    ('/newpost', NewPost)
 ], debug=True)
