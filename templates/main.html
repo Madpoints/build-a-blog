@@ -5,7 +5,7 @@
         {% for blog in blogs %}
 
             <div class="art">
-                <div class="art-title">{{ blog.title }}</div>
+                <div class="art-title"><a href="blog/{{ blog.key().id() }}">{{ blog.title }}</a></div>
                 <pre class="art-body">{{blog.blog}}</pre>
             </div>
 

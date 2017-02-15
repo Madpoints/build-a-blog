@@ -58,12 +58,25 @@ class NewPost(Handler):
         if title and blog:
             b = Blog(title = title, blog = blog)
             b.put()
-            self.redirect("/blog")
+            blog_id = b.key().id()
+            self.redirect("/blog/" + str(blog_id))
+            #self.render("single-post.html", blog=b)
         else:
             error = "we need both a title and some text!"
             self.render("new-post.html", title=title, blog=blog, error=error)
 
+class ViewPostHandler(Handler):
+    def get(self, id):
+        blog = Blog.get_by_id(int(id), parent=None)
+
+        if blog:
+            self.render("single-post.html", blog=blog)
+        else:
+            error = "blog post does not exist!"
+            self.render("single-post.html", blog=blog, error=error)
+
 app = webapp2.WSGIApplication([
     ('/blog', MainBlog),
-    ('/newpost', NewPost)
+    ('/newpost', NewPost),
+    webapp2.Route('/blog/<id:\d+>', ViewPostHandler)
 ], debug=True)
